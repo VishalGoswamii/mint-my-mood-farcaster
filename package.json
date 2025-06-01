@@ -1,0 +1,13 @@
+{
+  "name": "mint-my-mood-farcaster",
+  "version": "1.0.0",
+  "description": "A Farcaster mini app for tracking and minting moods",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "build": "echo 'No build step needed for static HTML'"
+  },
+  "keywords": ["farcaster", "mood", "nft", "web3"],
+  "author": "Your Name",
+  "license": "MIT"
+}
