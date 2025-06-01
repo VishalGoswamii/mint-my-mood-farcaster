@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mint My Mood</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .mood-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .mood-button {
+            background: #f8f9fa;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .mood-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .mood-button.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .mood-emoji {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .mood-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .mint-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .selected-mood {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .mood-preview {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .mint-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mint-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+        }
+        
+        .mint-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .mood-history {
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .history-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
+        
+        .history-emoji {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .history-info {
+            flex: 1;
+        }
+        
+        .history-mood {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .history-time {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="mood-container">
+        <h1>🎭 Mint My Mood</h1>
+        <p class="subtitle">How are you feeling today?</p>
+        
+        <div class="mood-grid">
+            <div class="mood-button" onclick="selectMood('happy', '😊', 'Happy')">
+                <span class="mood-emoji">😊</span>
+                <div class="mood-name">Happy</div>
+            </div>
+            <div class="mood-button" onclick="selectMood('excited', '🤩', 'Excited')">
+                <span class="mood-emoji">🤩</span>
+                <div class="mood-name">Excited</div>
+            </div>
+            <div class="mood-button" onclick="selectMood('calm', '😌', 'Calm')">
+                <span class="mood-emoji">😌</span>
+                <div class="mood-name">Calm</div>
+            </div>
+            <div class="mood-button" onclick="selectMood('thoughtful', '🤔', 'Thoughtful')">
+                <span class="mood-emoji">🤔</span>
+                <div class="mood-name">Thoughtful</div>
+            </div>
+            <div class="mood-button" onclick="selectMood('tired', '😴', 'Tired')">
+                <span class="mood-emoji">😴</span>
+                <div class="mood-name">Tired</div>
+            </div>
+            <div class="mood-button" onclick="selectMood('anxious', '😰', 'Anxious')">
+                <span class="mood-emoji">😰</span>
+                <div class="mood-name">Anxious</div>
+            </div>
+            <div class="mood-button" onclick="selectMood('grateful', '🙏', 'Grateful')">
+                <span class="mood-emoji">🙏</span>
+                <div class="mood-name">Grateful</div>
+            </div>
+            <div class="mood-button" onclick="selectMood('creative', '🎨', 'Creative')">
+                <span class="mood-emoji">🎨</span>
+                <div class="mood-name">Creative</div>
+            </div>
+            <div class="mood-button" onclick="selectMood('motivated', '💪', 'Motivated')">
+                <span class="mood-emoji">💪</span>
+                <div class="mood-name">Motivated</div>
+            </div>
+        </div>
+        
+        <div class="mint-section" id="mintSection" style="display: none;">
+            <div class="selected-mood">
+                <div class="mood-preview" id="selectedEmoji"></div>
+                <div>Current Mood: <strong id="selectedMoodName"></strong></div>
+            </div>
+            
+            <!-- Privacy Settings -->
+            <div style="margin: 15px 0; text-align: left;">
+                <label style="font-size: 14px; font-weight: bold; color: #333;">Privacy Setting:</label>
+                <div style="margin-top: 8px;">
+                    <label style="display: block; margin-bottom: 5px; font-size: 13px;">
+                        <input type="radio" name="privacy" value="public" checked style="margin-right: 8px;">
+                        🌍 Public - Visible to everyone
+                    </label>
+                    <label style="display: block; margin-bottom: 5px; font-size: 13px;">
+                        <input type="radio" name="privacy" value="anonymous" style="margin-right: 8px;">
+                        🥸 Anonymous - Hide your identity
+                    </label>
+                    <label style="display: block; margin-bottom: 5px; font-size: 13px;">
+                        <input type="radio" name="privacy" value="private" style="margin-right: 8px;">
+                        🔒 Private - Only for you
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Custom Message -->
+            <div style="margin: 15px 0; text-align: left;">
+                <label style="font-size: 14px; font-weight: bold; color: #333;">Add Context (Optional):</label>
+                <textarea 
+                    id="customMessage" 
+                    placeholder="What's making you feel this way? (e.g., 'Great coffee this morning!' or 'Nervous about presentation')"
+                    style="width: 100%; height: 60px; margin-top: 8px; padding: 10px; border: 2px solid #f0f0f0; border-radius: 8px; font-size: 14px; resize: vertical; box-sizing: border-box;"
+                ></textarea>
+                <div style="font-size: 12px; color: #666; margin-top: 5px;">
+                    <span id="charCount">0</span>/200 characters
+                </div>
+            </div>
+            
+            <!-- Cast Preview -->
+            <div id="castPreview" style="background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 10px; padding: 15px; margin: 15px 0; font-size: 14px;">
+                <div style="font-weight: bold; color: #666; margin-bottom: 8px;">Cast Preview:</div>
+                <div id="previewText"></div>
+            </div>
+            
+            <button class="mint-button" onclick="castMood()">
+                📱 Cast Mood
+            </button>
+            
+            <div id="mintOptions" style="display: none; margin-top: 15px;">
+                <button class="mint-button" onclick="mintMood()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    🪙 Mint Special Moment
+                </button>
+            </div>
+        </div>
+        
+        <div class="mood-history">
+            <h3>Your Mood History</h3>
+            <div id="moodHistory">
+                <p style="color: #666; font-style: italic;">No moods recorded yet. Select your first mood above!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize variables
+        let currentMood = null;
+        let moodHistory = [];
+        
+        function selectMood(moodId, emoji, name) {
+            // Remove previous selection
+            document.querySelectorAll('.mood-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selection to clicked button
+            event.target.closest('.mood-button').classList.add('selected');
+            
+            // Store current mood
+            currentMood = {
+                id: moodId,
+                emoji: emoji,
+                name: name,
+                timestamp: new Date()
+            };
+            
+            // Update mint section
+            document.getElementById('selectedEmoji').textContent = emoji;
+            document.getElementById('selectedMoodName').textContent = name;
+            document.getElementById('mintSection').style.display = 'block';
+            
+            // Update minting options
+            updateMintingOptions();
+            
+            // Update cast preview
+            updateCastPreview();
+        }
+        
+        function updateCastPreview() {
+            if (!currentMood) return;
+            
+            const privacy = document.querySelector('input[name="privacy"]:checked').value;
+            const customMessage = document.getElementById('customMessage').value.trim();
+            const previewElement = document.getElementById('previewText');
+            
+            let castText = '';
+            
+            if (privacy === 'private') {
+                castText = '🔒 This mood will be saved privately and not posted to Farcaster.';
+            } else {
+                if (privacy === 'anonymous') {
+                    castText = `${currentMood.emoji} Someone is feeling ${currentMood.name.toLowerCase()}`;
+                } else {
+                    castText = `${currentMood.emoji} Feeling ${currentMood.name.toLowerCase()} today!`;
+                }
+                
+                if (customMessage) {
+                    castText += ` - ${customMessage}`;
+                }
+                
+                castText += ` #MoodTracker #${currentMood.name}`;
+            }
+            
+            previewElement.textContent = castText;
+        }
+        
+        // Add event listeners for real-time preview updates
+        function setupEventListeners() {
+            // Privacy radio buttons
+            document.querySelectorAll('input[name="privacy"]').forEach(radio => {
+                radio.addEventListener('change', updateCastPreview);
+            });
+            
+            // Custom message textarea
+            const messageInput = document.getElementById('customMessage');
+            messageInput.addEventListener('input', function() {
+                const charCount = this.value.length;
+                document.getElementById('charCount').textContent = charCount;
+                
+                // Limit to 200 characters
+                if (charCount > 200) {
+                    this.value = this.value.substring(0, 200);
+                    document.getElementById('charCount').textContent = 200;
+                }
+                
+                updateCastPreview();
+            });
+        }
+        
+        function castMood() {
+            if (!currentMood) return;
+            
+            const privacy = document.querySelector('input[name="privacy"]:checked').value;
+            const customMessage = document.getElementById('customMessage').value.trim();
+            
+            // Create mood entry
+            const moodEntry = {
+                ...currentMood, 
+                minted: false,
+                privacy: privacy,
+                customMessage: customMessage
+            };
+            
+            // Add to history
+            moodHistory.unshift(moodEntry);
+            
+            // Keep only last 30 moods for demo
+            if (moodHistory.length > 30) {
+                moodHistory = moodHistory.slice(0, 30);
+            }
+            
+            // Update display
+            updateMoodHistory();
+            updateMintingOptions();
+            
+            // Show success message based on privacy setting
+            let message = '';
+            if (privacy === 'private') {
+                message = `🔒 Mood saved privately! Only you can see this entry.`;
+            } else if (privacy === 'anonymous') {
+                const castText = `${currentMood.emoji} Someone is feeling ${currentMood.name.toLowerCase()}${customMessage ? ` - ${customMessage}` : ''} #MoodTracker #${currentMood.name}`;
+                message = `🥸 Anonymous mood cast!\n\n"${castText}"\n\nYour identity is hidden but your mood helps the community.`;
+            } else {
+                const castText = `${currentMood.emoji} Feeling ${currentMood.name.toLowerCase()} today!${customMessage ? ` - ${customMessage}` : ''} #MoodTracker #${currentMood.name}`;
+                message = `📱 Mood cast publicly!\n\n"${castText}"\n\nYour friends can see and support your journey.`;
+            }
+            
+            alert(message);
+            
+            // Reset selection and form
+            resetMoodSelection();
+        }
+        
+        function mintMood() {
+            if (!currentMood) return;
+            
+            // Add to history as minted
+            moodHistory.unshift({...currentMood, minted: true});
+            
+            // Keep only last 30 moods for demo
+            if (moodHistory.length > 30) {
+                moodHistory = moodHistory.slice(0, 30);
+            }
+            
+            // Update display
+            updateMoodHistory();
+            updateMintingOptions();
+            
+            // Show success message
+            alert(`🎉 Successfully minted your ${currentMood.name} mood as an NFT! This was a special moment worth preserving forever.`);
+            
+            // Reset selection
+            resetMoodSelection();
+        }
+        
+        function resetMoodSelection() {
+            document.querySelectorAll('.mood-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.getElementById('mintSection').style.display = 'none';
+            document.getElementById('customMessage').value = '';
+            document.getElementById('charCount').textContent = '0';
+            document.querySelector('input[name="privacy"][value="public"]').checked = true;
+            currentMood = null;
+        }
+        
+        function updateMintingOptions() {
+            const totalDays = moodHistory.length;
+            const mintOptions = document.getElementById('mintOptions');
+            
+            // Show mint option if it's a milestone or user has been consistent
+            if (totalDays > 0 && (totalDays % 7 === 0 || isSpecialMood())) {
+                mintOptions.style.display = 'block';
+            } else {
+                mintOptions.style.display = 'none';
+            }
+        }
+        
+        function isSpecialMood() {
+            // Consider grateful, excited, or creative moods as "special"
+            return currentMood && ['grateful', 'excited', 'creative', 'motivated'].includes(currentMood.id);
+        }
+        
+        function updateMoodHistory() {
+            const historyContainer = document.getElementById('moodHistory');
+            
+            if (moodHistory.length === 0) {
+                historyContainer.innerHTML = '<p style="color: #666; font-style: italic;">No moods recorded yet. Select your first mood above!</p>';
+                return;
+            }
+            
+            historyContainer.innerHTML = moodHistory.map(mood => `
+                <div class="history-item">
+                    <span class="history-emoji">${mood.emoji}</span>
+                    <div class="history-info">
+                        <div class="history-mood">
+                            ${mood.name} ${mood.minted ? '🪙' : ''}
+                            ${mood.privacy === 'anonymous' ? '🥸' : mood.privacy === 'private' ? '🔒' : '🌍'}
+                        </div>
+                        <div class="history-time">${new Date(mood.timestamp).toLocaleDateString()} at ${new Date(mood.timestamp).toLocaleTimeString()}</div>
+                        ${mood.customMessage ? `<div style="font-style: italic; color: #666; font-size: 12px; margin-top: 3px;">"${mood.customMessage}"</div>` : ''}
+                    </div>
+                    ${mood.minted ? '<div style="color: #667eea; font-size: 12px; font-weight: bold;">MINTED NFT</div>' : ''}
+                </div>
+            `).join('');
+        }
+        
+        // Initialize the mood history display and event listeners
+        updateMoodHistory();
+        setupEventListeners();
+    </script>
+</body>
+</html>
